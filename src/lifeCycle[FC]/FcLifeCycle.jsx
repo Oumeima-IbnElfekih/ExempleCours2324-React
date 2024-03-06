@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react"
+import { useParams, useSearchParams } from "react-router-dom"
 
 export default function FcLifeCycle(props) {
-    
+    const  {id}= useParams();
+   const [name , setName] =useSearchParams ({name:"Defaultname"})
+    console.log(id);
+   
     const [count, setCount] = useState(0)
     const [test,setTest] = useState(0)
     
@@ -37,6 +41,7 @@ export default function FcLifeCycle(props) {
              <button onClick={increment}>Increment</button>
             <button onClick={decrement}>Decrement</button>
             {count}
+            <p>le parametre envoye: {id}</p>
         </>
     )
 }

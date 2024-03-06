@@ -1,31 +1,42 @@
-import { useEffect, useState } from 'react'
+import React,{ Suspense, useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import ClassComponent from './Composants/ClassComponent'
-import FunctionalComponent from './Composants/FunctionalComponent'
-import Mouting from './lifeCycle[CC]/Mounting'
+//import ClassComponent from './Composants/ClassComponent'
+//import FunctionalComponent from './Composants/FunctionalComponent'
+
 import { Update } from './lifeCycle[CC]/Update'
-import Unmouting from './lifeCycle[CC]/Unmounting'
-import useWindowWidth from './CustomHooks/useWindowWidth'
+
+//import FcLifeCycle from './lifeCycle[FC]/FcLifeCycle'
+import { Route, Routes } from 'react-router-dom'
+import Counter from './Composants/Counter'
+import CounterToolKit from './Composants/CounterToolKit'
+//import NotFound from './Composants/NotFound'
+const FcLifeCycle = React.lazy(()=>import("./lifeCycle[FC]/FcLifeCycle"))
+const ClassComponent = React.lazy(()=>import("./Composants/ClassComponent"))
+const FunctionalComponent = React.lazy(()=>import("./Composants/FunctionalComponent"))
+const NotFound = React.lazy(()=>import("./Composants/NotFound"))
+
 
 function App() {
-  const [{color , background},setColor] =
-   useState({color: 'red', background :'blue'});
- const [state,setState]=useState("");
-  const res =useWindowWidth();
- useEffect(()=> console.log("mounting"),[])
- useEffect(()=> console.log("chaque rerender"));
- useEffect(()=> console.log("mouting & updating"),[color]);
+  
   return (
   <> 
-  <input type="text"
-   onChange={e=> setColor(c=> ({...c, color: e.target.value}))}   />
-  <p> the color is : {color} {background}</p> 
-
-    {res.width } {res.height}
+  <Suspense fallback={<p>Waitng for the server ********</p>}>
+  <Routes>
+    <Route path="/routes">
+      <Route index element={<FunctionalComponent/>}/> 
+      <Route  path ="counter" element={<Counter/>}/> 
+      <Route  path ="counter-toolkit" element={<CounterToolKit/>}/> 
+ <Route path = "updating" element = {<Update/>} />
+  <Route path = "updating/id" element = {<FcLifeCycle/>} />
+  <Route path = "ClassComponent" element = {<ClassComponent/>}/>
+  </Route>
+  <Route path = "*" element = {<NotFound/>} />
+    </Routes>
+    </Suspense>
     </>
-  )
+  );
 }
 
-export default App
+export default App ;
